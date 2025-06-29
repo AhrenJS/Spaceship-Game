@@ -1,3 +1,4 @@
+import sys
 import pygame
 import os
 pygame.init()
@@ -128,7 +129,6 @@ def draw_winner(win_text, win_image):
 def maingame():
     yellow_pos = pygame.Rect(200, 300, Ship_WIDTH, Ship_HEIGHT)
     red_pos = pygame.Rect(700,300, Ship_WIDTH, Ship_HEIGHT)
-    main_theme.play()
     red_bullet = []
     yellow_bullet = []
 
@@ -142,7 +142,9 @@ def maingame():
         for event in pygame.event.get():
             if event.type==pygame.QUIT:
                 run=False
+                main_theme.stop()
                 pygame.quit()
+                sys.exit()
             if event.type==pygame.KEYDOWN:
                 if event.key == pygame.K_r and len(yellow_bullet) < Max_Bullet:
                     bullet = pygame.Rect(yellow_pos.x + yellow_pos.width, yellow_pos.y + yellow_pos.height/2 - 2, 10, 4)
@@ -171,7 +173,6 @@ def maingame():
             win_image += 2
         if winner != "":
             draw_winner(winner, win_image)
-            main_theme.stop()
             break
 
         keys_pressed = pygame.key.get_pressed()
@@ -182,9 +183,10 @@ def maingame():
         handle_bullet(yellow_bullet, red_bullet, yellow_pos, red_pos)
 
         draw_window(yellow_pos, red_pos, yellow_bullet, red_bullet, yellow_health, red_health, yellow_score, red_score)
-    maingame()
 
 if __name__ == "__main__":
     yellow_score = []
     red_score = []
-    maingame()
+    main_theme.play()
+    while True:
+        maingame()
